@@ -18,7 +18,7 @@ import java.util.Date;
 
 @Service
 @Transactional
-@Qualifier("UserDetailsService")
+@Qualifier("userDetailsService")
 public class UserService implements IUserService, UserDetailsService {
 
     @Autowired
