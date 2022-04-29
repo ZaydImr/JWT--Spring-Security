@@ -8,6 +8,7 @@ import com.security.jwt.helpers.exception.UsernameExistException;
 import com.security.jwt.repository.UserRepository;
 import com.security.jwt.security.UserPrincipal;
 import com.security.jwt.service.IUserService;
+import com.security.jwt.service.LoginAttemptService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @Transactional
@@ -34,6 +36,8 @@ public class UserService implements IUserService, UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private LoginAttemptService loginAttemptService;
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Override
@@ -44,12 +48,26 @@ public class UserService implements IUserService, UserDetailsService {
             throw new UsernameNotFoundException("User not found by username: " + username);
         }
         else {
+            validateLoginAttempt(user);
             user.setLastLoginDateDisplay(user.getLastLoginDate());
             user.setLastLoginDate(new Date());
             userRepository.save(user);
             UserPrincipal userPrincipal = new UserPrincipal(user);
             LOGGER.info("Returning found user by username: " + username);
             return userPrincipal;
+        }
+    }
+
+    private void validateLoginAttempt(User user) {
+        if(user.isNotLocked()){
+            if(loginAttemptService.hasExceededMaxAttempts(user.getUsername())){
+                user.setNotLocked(false);
+            }
+            else{
+                user.setNotLocked(true);
+            }
+        }else {
+            loginAttemptService.evictUserFromLoginAttemptCache(user.getUsername());
         }
     }
 
