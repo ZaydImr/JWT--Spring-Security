@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.util.Objects;
@@ -34,11 +35,17 @@ public class ExceptionHandling implements ErrorController {
     private final String ERROR_PROCESSING_FILE = "Error occurred while processing file";
     private final String NOT_ENOUGH_PERMISSION = "You do not have enough permission";
     private final String NO_HANDLER_FOUND = "This page was not found";
+    private final String EMAIL_SERVICE_ERROR = "Verification email wont be send !!";
     private final String ERROR_PATH = "/error";
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<HttpResponse> accountDisabledException(){
         return createHttpResponse(HttpStatus.BAD_REQUEST, ACCOUNT_DISABLED);
+    }
+
+    @ExceptionHandler(MessagingException.class)
+    public ResponseEntity<HttpResponse> emailServiceException(){
+        return createHttpResponse(HttpStatus.BAD_REQUEST, EMAIL_SERVICE_ERROR);
     }
 
     @ExceptionHandler(BadCredentialsException.class)

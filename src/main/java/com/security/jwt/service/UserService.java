@@ -1,4 +1,4 @@
-package com.security.jwt.service.implementation;
+package com.security.jwt.service;
 
 import com.security.jwt.entity.User;
 import com.security.jwt.helpers.Role;
@@ -7,8 +7,7 @@ import com.security.jwt.helpers.exception.UserNotFoundException;
 import com.security.jwt.helpers.exception.UsernameExistException;
 import com.security.jwt.repository.UserRepository;
 import com.security.jwt.security.UserPrincipal;
-import com.security.jwt.service.IUserService;
-import com.security.jwt.service.LoginAttemptService;
+import com.security.jwt.service.interfaces.IUserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -22,10 +21,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @Transactional
@@ -38,6 +37,8 @@ public class UserService implements IUserService, UserDetailsService {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private LoginAttemptService loginAttemptService;
+    @Autowired
+    private EmailService emailService;
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Override
@@ -72,7 +73,7 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, EmailExistException, UsernameExistException {
+    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
         validateNewUsernameAndEmail(StringUtils.EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
@@ -89,7 +90,8 @@ public class UserService implements IUserService, UserDetailsService {
         user.setRoles(Role.ROLE_USER.name());
         user.setAuthorities(Role.ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl());
-        LOGGER.info("New user password: " + password);
+        //LOGGER.info("New user password: " + password);
+        emailService.sendNewPasswordEmail(firstName, password, email);
         return userRepository.save(user);
     }
 

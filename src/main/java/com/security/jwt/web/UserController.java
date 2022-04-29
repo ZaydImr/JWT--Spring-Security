@@ -7,7 +7,7 @@ import com.security.jwt.helpers.exception.UserNotFoundException;
 import com.security.jwt.helpers.exception.UsernameExistException;
 import com.security.jwt.security.JwtTokenProvider;
 import com.security.jwt.security.UserPrincipal;
-import com.security.jwt.service.IUserService;
+import com.security.jwt.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
 
 import static com.security.jwt.helpers.SecurityConstant.JWT_TOKEN_HEADER;
 
@@ -30,7 +32,7 @@ public class UserController extends ExceptionHandling {
     private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("register")
-    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, EmailExistException, UsernameExistException {
+    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
         User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail());
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
