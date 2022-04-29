@@ -1,4 +1,4 @@
-package com.security.jwt.helpers;
+package com.security.jwt.helpers.constant;
 
 import java.util.concurrent.TimeUnit;
 

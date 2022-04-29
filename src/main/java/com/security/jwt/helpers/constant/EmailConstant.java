@@ -1,4 +1,4 @@
-package com.security.jwt.helpers;
+package com.security.jwt.helpers.constant;
 
 public class EmailConstant {
     public static final String SIMPLE_MAIL_TRANSFER_PROTOCOL = "smtps";

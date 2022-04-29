@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
-import static com.security.jwt.helpers.SecurityConstant.JWT_TOKEN_HEADER;
+import static com.security.jwt.helpers.constant.SecurityConstant.JWT_TOKEN_HEADER;
 
 @RestController
 @RequestMapping({"/", "user"})

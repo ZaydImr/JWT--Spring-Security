@@ -1,18 +1,16 @@
 package com.security.jwt.service;
 
-import com.security.jwt.helpers.EmailConstant;
 import com.sun.mail.smtp.SMTPTransport;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
-import static com.security.jwt.helpers.EmailConstant.*;
+import static com.security.jwt.helpers.constant.EmailConstant.*;
 
 @Service
 public class EmailService {
@@ -31,7 +29,7 @@ public class EmailService {
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email, false));
         message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(CC_EMAIL, false));
         message.setSubject(EMAIL_SUBJECT);
-        message.setText("Hello " + firstname + ", \n\nYour new account password is : " + password + "\n\nThe supprot team :)");
+        message.setText("Hello " + firstname + ", \n\nYour new account password is : " + password + "\n\nThe support team :)");
         message.setSentDate(new Date());
         message.saveChanges();
         return message;

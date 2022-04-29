@@ -2,7 +2,7 @@ package com.security.jwt.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.security.jwt.helpers.HttpResponse;
-import com.security.jwt.helpers.SecurityConstant;
+import com.security.jwt.helpers.constant.SecurityConstant;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;

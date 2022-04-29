@@ -1,4 +1,4 @@
-package com.security.jwt.helpers;
+package com.security.jwt.entity;
 
 import static com.security.jwt.helpers.Authority.*;
 

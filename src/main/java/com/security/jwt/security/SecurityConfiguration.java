@@ -1,6 +1,6 @@
 package com.security.jwt.security;
 
-import com.security.jwt.helpers.SecurityConstant;
+import com.security.jwt.helpers.constant.SecurityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
